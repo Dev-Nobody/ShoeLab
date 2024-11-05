@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "776919120770",
+    "project_id": "shoelab-fyp-f73e3",
+    "storage_bucket": "shoelab-fyp-f73e3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:776919120770:android:88124f9046f2fe2c9bad9b",
+        "android_client_info": {
+          "package_name": "com.example.fyp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDo7T3F8fSiuFIcYuAduAKJLZ5Gqewr5ww"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

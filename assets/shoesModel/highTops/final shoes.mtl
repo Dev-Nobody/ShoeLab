@@ -1,0 +1,22 @@
+newmtl initialShadingGroup
+illum 4 # main
+Kd 1.0 1.0 1.0
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl lambert4SG
+illum 4 # laces
+Kd 0.0 0.0 0.0
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl shoeSG
+illum 4
+Kd 1.0 1.0 0.0
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.20 0.20 0.20
+Ns 98.00
+
+
