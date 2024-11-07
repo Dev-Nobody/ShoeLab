@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fyp/pages/customer/shoes_page.dart'; // Import your ShoesPage here
 
 class ShoesByCategoryPage extends StatelessWidget {
-  final String categoryId; // Pass the categoryId from the category document
+  final String categoryId;
   final String categoryName;
 
   const ShoesByCategoryPage({
@@ -15,12 +16,12 @@ class ShoesByCategoryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(categoryName), // Display the category name as the title
+        title: Text(categoryName),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('shoes')
-            .where('category', isEqualTo: categoryId) // Filter by categoryId
+            .where('category', isEqualTo: categoryId)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -39,19 +40,28 @@ class ShoesByCategoryPage extends StatelessWidget {
             itemCount: shoes.length,
             itemBuilder: (context, index) {
               final shoe = shoes[index];
+              final shoeId = shoe.id;
 
-              return ListTile(
-                leading: Image.network(
-                  shoe['imagePath'],
-                  width: 50,
-                  height: 50,
-                  fit: BoxFit.cover,
-                ),
-                title: Text(shoe['name']),
-                subtitle: Text('Rs. ${shoe['price']}'),
+              return GestureDetector(
                 onTap: () {
-                  // You can navigate to the shoe detail page if needed
+                  // Navigate to ShoesPage, passing the shoeId
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ShoesPage(shoeId: shoeId),
+                    ),
+                  );
                 },
+                child: ListTile(
+                  leading: Image.network(
+                    shoe['imagePath'],
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.cover,
+                  ),
+                  title: Text(shoe['name']),
+                  subtitle: Text('Rs. ${shoe['price']}'),
+                ),
               );
             },
           );

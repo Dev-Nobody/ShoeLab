@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fyp/pages/customer/category_shoes_page.dart';
+import 'package:list_wheel_scroll_view_nls/list_wheel_scroll_view_nls.dart';
 
 class CategoryListTile extends StatelessWidget {
   @override
@@ -20,90 +21,85 @@ class CategoryListTile extends StatelessWidget {
 
         final categories = snapshot.data!.docs;
 
-        return ListView.builder(
-          scrollDirection: Axis.horizontal, // Horizontal list
-          itemCount: categories.length,
-          itemBuilder: (context, index) {
-            final category = categories[index];
-
-            return GestureDetector(
-              onTap: () {
-
-                print('Category ID: ${category.id}');
-                // Navigate to ShoesByCategoryPage when tapped
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ShoesByCategoryPage(
-                      categoryId: category.id, // Pass category document id
-                      categoryName: category['name'], // Pass category name
-                    ),
-                  ),
-                );
-              },
-              child: Stack(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(25.0),
-                    child: Container(
-                      height: 400,
-                      width: 250,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(52),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Category Name
-                              Padding(
-                                padding: const EdgeInsets.only(left: 15.0, top: 30),
-                                child: Text(
-                                  category['name'],
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              ),
-                              // Background logo (Category name in uppercase)
-                              Padding(
-                                padding: const EdgeInsets.only(left: 15, right: 15),
-                                child: Text(
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 2,
-                                  category['name'].toString().toUpperCase(),
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 80,
-                                    color: Colors.grey.shade200,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+        return Container(
+          height: 400, // Set a fixed height for the horizontal scroll
+          child: ListWheelScrollViewX(
+            scrollDirection: Axis.horizontal,
+            itemExtent: 270, // Adjust width spacing between items
+            children: categories.map((category) {
+              return GestureDetector(
+                onTap: () {
+                  print('Category ID: ${category.id}');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ShoesByCategoryPage(
+                        categoryId: category.id,
+                        categoryName: category['name'],
                       ),
                     ),
-                  ),
-                  // Category Image
-                  Positioned(
-                    top: 80,
-                    right: 0,
-                    child: Image.network(
-                      category['image'],
-                      height: 280,
-                      fit: BoxFit.cover,
+                  );
+                },
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(25.0),
+                      child: Container(
+                        height: 400,
+                        width: 250,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(52),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 15.0, top: 30),
+                                  child: Text(
+                                    category['name'],
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 15, right: 15),
+                                  child: Text(
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                    category['name'].toString().toUpperCase(),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 80,
+                                      color: Colors.grey.shade200,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            );
-
-          },
+                    Positioned(
+                      top: 80,
+                      right: 0,
+                      child: Image.network(
+                        category['image'],
+                        height: 280,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
         );
       },
     );

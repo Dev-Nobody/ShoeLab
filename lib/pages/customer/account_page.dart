@@ -8,6 +8,7 @@ import 'package:fyp/pages/customer/customer_setting_page.dart';
 import 'package:fyp/pages/customer/home_page.dart';
 import 'package:fyp/pages/customer/my_reviews.dart';
 import 'package:fyp/pages/customer/try.dart';
+import 'package:list_wheel_scroll_view_nls/list_wheel_scroll_view_nls.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -157,7 +158,71 @@ class _AccountPageState extends State<AccountPage> {
           MyListTile(icon: Icons.ac_unit, text: 'sd', onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) => Try(),));
           },),
-          
+
+          Container(
+            height: 250,
+            child: ListWheelScrollViewX(scrollDirection:Axis.horizontal,itemExtent: 200, children: [Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(25.0),
+                  child: Container(
+                    height: 400,
+                    width: 250,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(52),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Category Name
+                            Padding(
+                              padding: const EdgeInsets.only(left: 15.0, top: 30),
+                              child: Text(
+                               'name',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ),
+                            // Background logo (Category name in uppercase)
+                            Padding(
+                              padding: const EdgeInsets.only(left: 15, right: 15),
+                              child: Text(
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
+                                'name'.toString().toUpperCase(),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 80,
+                                  color: Colors.grey.shade200,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                // Category Image
+                Positioned(
+                  top: 80,
+                  right: 0,
+                  child: Image.network(
+                    'image',
+                    height: 280,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ],
+            )]),
+          ),
+
         ],
       ),
     );

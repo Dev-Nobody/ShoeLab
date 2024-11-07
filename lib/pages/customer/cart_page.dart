@@ -165,7 +165,7 @@ class _CartPageState extends State<CartPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25),
+              padding: const EdgeInsets.symmetric(horizontal: 25,vertical: 15),
               child: Container(
                 width: double.infinity,
                 padding: EdgeInsets.symmetric(horizontal: 20),
@@ -180,30 +180,30 @@ class _CartPageState extends State<CartPage> {
                         style: TextStyle(color: Colors.lightGreenAccent.shade100),
                       ))),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: MyButton(
-                  onTap: () async {
-                    List<Map<String, dynamic>> checkedItems =
-                        await fetchCheckedItems(); // Fetch checked items from Firestore
-
-                    if (checkedItems.isNotEmpty) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              PaymentPage(checkedItems: checkedItems),
-                        ),
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('No items selected to proceed.')),
-                      );
-                    }
-                  },
-                  text: 'CheckOut'),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: MyButton(
+            //       onTap: () async {
+            //         List<Map<String, dynamic>> checkedItems =
+            //             await fetchCheckedItems(); // Fetch checked items from Firestore
+            //
+            //         if (checkedItems.isNotEmpty) {
+            //           Navigator.push(
+            //             context,
+            //             MaterialPageRoute(
+            //               builder: (context) =>
+            //                   PaymentPage(checkedItems: checkedItems),
+            //             ),
+            //           );
+            //         } else {
+            //           ScaffoldMessenger.of(context).showSnackBar(
+            //             const SnackBar(
+            //                 content: Text('No items selected to proceed.')),
+            //           );
+            //         }
+            //       },
+            //       text: 'CheckOut'),
+            // ),
           ],
         ),
       ),

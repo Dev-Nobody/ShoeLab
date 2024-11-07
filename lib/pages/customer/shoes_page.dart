@@ -4,7 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/components/my_size_box.dart';
 import 'package:fyp/components/my_slider.dart';
+import 'package:fyp/pages/customer/cart_page.dart';
 import 'package:fyp/pages/customer/customize_page.dart';
+import 'package:fyp/pages/customer/home_page.dart';
 
 class ShoesPage extends StatefulWidget {
   final String shoeId; // Pass the shoeId instead of the model
@@ -137,7 +139,9 @@ class _ShoesPageState extends State<ShoesPage> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(selectedIndex: 2,),));
+            },
             icon: Icon(
               Icons.shopping_cart,
               color: Colors.grey.shade500,
