@@ -300,10 +300,28 @@ class CartService {
     }
   }
 
+  // Method to get the count of items in the cart for the current user
+  Future<int> getCartItemCount() async {
+    final user = _auth.currentUser;
+    if (user == null) {
+      return 0;
+    }
+
+    try {
+      QuerySnapshot querySnapshot = await _firestore
+          .collection('users')
+          .doc(user.email) // Use user email as document ID
+          .collection('cart')
+          .get();
+
+      // Return the count of items in the cart
+      return querySnapshot.docs.length;
+    } catch (e) {
+      print("Error fetching cart item count: $e");
+      return 0; // Return 0 if there's an error
+    }
+  }
+
 
 }
 
-//Cart Service and Cart Operation have only two function/problems left to solve
-//1)toggle select all
-//2)refresh ui after clearing cart
-// both problems exist in homepage App Bar

@@ -24,6 +24,7 @@ class CategoryListTile extends StatelessWidget {
         return Container(
           height: 400, // Set a fixed height for the horizontal scroll
           child: ListWheelScrollViewX(
+
             scrollDirection: Axis.horizontal,
             itemExtent: 270, // Adjust width spacing between items
             children: categories.map((category) {

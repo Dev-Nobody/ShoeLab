@@ -114,23 +114,26 @@ class _AccountPageState extends State<AccountPage> {
 
           const SizedBox(height: 40,),
 
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('My Orders',style: TextStyle(color: Colors.white),),
-              GestureDetector(
-                onTap: () {
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('My Orders',style: TextStyle(color: Colors.white),),
+                GestureDetector(
+                  onTap: () {
 
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>  CustomerOrderPage(initialTabIndex: 0,), // Corrected route
-                    ),
-                  );
-                },
-                  child: const Text('View All Orders >',style: TextStyle(color: Colors.white),)),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>  CustomerOrderPage(initialTabIndex: 0,), // Corrected route
+                      ),
+                    );
+                  },
+                    child: const Text('View All Orders >',style: TextStyle(color: Colors.white),)),
 
-            ],
+              ],
+            ),
           ),
 
           const SizedBox(height: 20,),
@@ -149,9 +152,22 @@ class _AccountPageState extends State<AccountPage> {
 
           const SizedBox(height: 20,),
 
+
+
+
           //my reviews
-          MyListTile(icon: Icons.reviews, text: 'My Review', onTap: () {
+          MyListTile(icon: Icons.reviews_outlined, text: 'My Review', onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) => MyReviewsPage(),));
+          },),
+
+          //my reviews
+          MyListTile(icon: Icons.message_outlined, text: 'My Message', onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => MyReviewsPage(),));
+          },),
+
+          //try
+          MyListTile(icon: Icons.connect_without_contact_rounded, text: 'Contact Customer Care', onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => Try(),));
           },),
 
           //try
@@ -159,69 +175,8 @@ class _AccountPageState extends State<AccountPage> {
             Navigator.push(context, MaterialPageRoute(builder: (context) => Try(),));
           },),
 
-          Container(
-            height: 250,
-            child: ListWheelScrollViewX(scrollDirection:Axis.horizontal,itemExtent: 200, children: [Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(25.0),
-                  child: Container(
-                    height: 400,
-                    width: 250,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(52),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Category Name
-                            Padding(
-                              padding: const EdgeInsets.only(left: 15.0, top: 30),
-                              child: Text(
-                               'name',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ),
-                            // Background logo (Category name in uppercase)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 15, right: 15),
-                              child: Text(
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 2,
-                                'name'.toString().toUpperCase(),
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 80,
-                                  color: Colors.grey.shade200,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                // Category Image
-                Positioned(
-                  top: 80,
-                  right: 0,
-                  child: Image.network(
-                    'image',
-                    height: 280,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ],
-            )]),
-          ),
+
+
 
         ],
       ),

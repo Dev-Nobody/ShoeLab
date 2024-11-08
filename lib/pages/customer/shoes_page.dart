@@ -9,7 +9,7 @@ import 'package:fyp/pages/customer/customize_page.dart';
 import 'package:fyp/pages/customer/home_page.dart';
 
 class ShoesPage extends StatefulWidget {
-  final String shoeId; // Pass the shoeId instead of the model
+  final String shoeId;
 
   const ShoesPage({super.key, required this.shoeId});
 
@@ -20,9 +20,7 @@ class ShoesPage extends StatefulWidget {
 class _ShoesPageState extends State<ShoesPage> {
   String? selectedSize;
   Map<String, dynamic>? shoeData;
-  List<Map<String, dynamic>> cart = []; // Local cart list to store selected items
 
-  // Fetch shoe data from Firestore
   Future<void> fetchShoeData() async {
     DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
         .collection('shoes')
@@ -43,7 +41,6 @@ class _ShoesPageState extends State<ShoesPage> {
     final user = FirebaseAuth.instance.currentUser;
 
     if (selectedSize != null && shoeData != null && user != null) {
-      // Prepare cart item data
       Map<String, dynamic> cartItem = {
         'shoeId': widget.shoeId,
         'shoeName': shoeData!['name'],
@@ -54,10 +51,9 @@ class _ShoesPageState extends State<ShoesPage> {
         'addedAt': Timestamp.now(),
         'imagePath': shoeData!['imagePath'],
         'quantity': 1,
-        'checked':false,
+        'checked': false,
       };
 
-      // Check if the shoe with the selected size is already in the cart
       QuerySnapshot existingItem = await FirebaseFirestore.instance
           .collection('users')
           .doc(user.email)
@@ -67,7 +63,6 @@ class _ShoesPageState extends State<ShoesPage> {
           .get();
 
       if (existingItem.docs.isNotEmpty) {
-        // If it exists, update the quantity
         String cartItemId = existingItem.docs.first.id;
         await FirebaseFirestore.instance
             .collection('users')
@@ -78,7 +73,6 @@ class _ShoesPageState extends State<ShoesPage> {
           'quantity': FieldValue.increment(1),
         });
       } else {
-        // Add new cart item
         await FirebaseFirestore.instance
             .collection('users')
             .doc(user.email)
@@ -86,7 +80,6 @@ class _ShoesPageState extends State<ShoesPage> {
             .add(cartItem);
       }
 
-      // Show success dialog
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -96,7 +89,6 @@ class _ShoesPageState extends State<ShoesPage> {
         ),
       );
     } else {
-      // Show alert if no size is selected
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -130,7 +122,7 @@ class _ShoesPageState extends State<ShoesPage> {
         ),
         title: Center(
           child: Text(
-            shoeData!['name'], // Fetch name from Firestore
+            shoeData!['name'],
             style: TextStyle(
                 color: Colors.grey.shade500,
                 fontWeight: FontWeight.bold,
@@ -138,15 +130,59 @@ class _ShoesPageState extends State<ShoesPage> {
           ),
         ),
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(selectedIndex: 2,),));
+          StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection('users')
+                .doc(FirebaseAuth.instance.currentUser?.email)
+                .collection('cart')
+                .snapshots(),
+            builder: (context, snapshot) {
+              int cartCount = snapshot.data?.docs.length ?? 0;
+              return Stack(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HomePage(selectedIndex: 2),
+                        ),
+                      );
+                    },
+                    icon: Icon(
+                      Icons.shopping_cart,
+                      color: Colors.grey.shade500,
+                    ),
+                  ),
+                  if (cartCount > 0)
+                    Positioned(
+                      right: 5,
+                      top: 5,
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        constraints: const BoxConstraints(
+                          minWidth: 18,
+                          minHeight: 18,
+                        ),
+                        child: Text(
+                          '$cartCount',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                ],
+              );
             },
-            icon: Icon(
-              Icons.shopping_cart,
-              color: Colors.grey.shade500,
-            ),
-          )
+          ),
         ],
         backgroundColor: Colors.transparent,
       ),
