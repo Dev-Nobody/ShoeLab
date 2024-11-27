@@ -20,7 +20,7 @@ class OrderService {
 
       List<Map<String, dynamic>> orderItems = [];
 
-      // Fetch vendor usernames for each item in the order
+      // Fetch shoeId for each item in the order and store it
       for (var item in items) {
         String shoeName = item['shoeName'];
         QuerySnapshot shoeQuery = await _firestore.collection('shoes')
@@ -28,15 +28,14 @@ class OrderService {
             .get();
 
         if (shoeQuery.docs.isNotEmpty) {
-          String vendorUsername = shoeQuery.docs.first['vendorUsername'];
+          String shoeId = shoeQuery.docs.first.id; // Store the shoeId instead of other details
 
-          // Add item with vendorUsername to orderItems
+          // Add shoeId, quantity, and selectedSize to orderItems
           orderItems.add({
-            'shoeName': shoeName,
+            'shoeId': shoeId,  // Store the shoeId here
             'shoeSize': item['selectedSize'],
             'quantity': item['quantity'],
             'customized': item['customized'] ?? false,
-            'vendorUsername': vendorUsername,
           });
         } else {
           throw Exception("Shoe not found: $shoeName");
@@ -64,6 +63,60 @@ class OrderService {
       throw Exception("Failed to create order: $e");
     }
   }
+
+
+  // Function to fetch shoe details by shoeId
+  Future<Map<String, dynamic>> fetchShoeById(String shoeId) async {
+    try {
+      // Fetch the shoe document using the shoeId
+      DocumentSnapshot shoeSnapshot = await _firestore.collection('shoes').doc(shoeId).get();
+      if (!shoeSnapshot.exists) {
+        throw Exception("Shoe not found for shoeId: $shoeId");
+      }
+
+      // Return the shoe data as a map
+      return shoeSnapshot.data() as Map<String, dynamic>;
+    } catch (e) {
+      throw Exception("Failed to fetch shoe details: $e");
+    }
+  }
+
+
+  Future<List<Map<String, dynamic>>> fetchOrderDetails(String orderId) async {
+    try {
+      // Fetch the order document using the orderId
+      DocumentSnapshot orderSnapshot = await _firestore.collection('orders').doc(orderId).get();
+      if (!orderSnapshot.exists) {
+        throw Exception("Order not found");
+      }
+
+      Map<String, dynamic> orderData = orderSnapshot.data() as Map<String, dynamic>;
+      List<Map<String, dynamic>> orderItems = List.from(orderData['orderItems']);
+
+      // Fetch shoe details for each item using the shoeId
+      for (var orderItem in orderItems) {
+        String shoeId = orderItem['shoeId'];
+
+        // Fetch shoe details using the shoeId
+        DocumentSnapshot shoeSnapshot = await _firestore.collection('shoes').doc(shoeId).get();
+        if (shoeSnapshot.exists) {
+          Map<String, dynamic> shoeData = shoeSnapshot.data() as Map<String, dynamic>;
+
+          // Add shoe details (e.g., name, image, etc.) to orderItem
+          orderItem['shoeName'] = shoeData['name'];
+          orderItem['shoeImage'] = shoeData['imagePath'];  // Assuming 'imagePath' stores the image URL
+          orderItem['vendorUsername'] = shoeData['vendorUsername'];
+        } else {
+          throw Exception("Shoe not found for shoeId: $shoeId");
+        }
+      }
+
+      return orderItems; // Return the order items with shoe details
+    } catch (e) {
+      throw Exception("Failed to fetch order details: $e");
+    }
+  }
+
 
   // Function to fetch orders based on userId
   Future<List<Map<String, dynamic>>> fetchOrdersByUserId(String userId) async {
@@ -177,4 +230,28 @@ class OrderService {
       throw Exception("Failed to update order status: $e");
     }
   }
+
+  // Method to delete an order by orderId
+  Future<void> deleteOrder(String orderId) async {
+    try {
+      final User? user = _auth.currentUser;
+      if (user == null) {
+        throw Exception("No user is currently logged in");
+      }
+
+      String userId = user.email!;  // Get the current user's email
+
+      // Delete the order from the 'orders' collection
+      await _firestore.collection('orders').doc(orderId).delete();
+      print("Order deleted from orders collection");
+
+      // Delete the order from the user's subcollection of orders
+      await _firestore.collection('users').doc(userId).collection('orders').doc(orderId).delete();
+      print("Order deleted from user's orders subcollection");
+
+    } catch (e) {
+      throw Exception("Failed to delete order: $e");
+    }
+  }
+
 }

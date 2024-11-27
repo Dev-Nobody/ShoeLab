@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fyp/pages/customer/review_page.dart';
+import 'package:fyp/pages/customer/shoes_page.dart';
 import 'package:fyp/services/order_service.dart';
+import 'package:fyp/services/shoes_services.dart';
 
 class CustomerOrderPage extends StatefulWidget {
   final int initialTabIndex;
@@ -15,6 +17,7 @@ class CustomerOrderPage extends StatefulWidget {
 class _CustomerOrderPageState extends State<CustomerOrderPage>
     with SingleTickerProviderStateMixin {
   OrderService _orderService = OrderService();
+  ShoeService _shoeService = ShoeService();  // New service to fetch shoe details
   Future<List<Map<String, dynamic>>>? _ordersFuture;
   TabController? _tabController;
   String? _currentUserEmail;
@@ -156,18 +159,75 @@ class _CustomerOrderPageState extends State<CustomerOrderPage>
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Total Price: Rs. ${order['totalPrice']}"),
-                Text("Order Date: ${order['orderDate']}"),
-                Text("Order Time: ${order['orderTime']}"),
-                Text("Items: ${order['orderItems'].length}"),
+                SizedBox(height: 10),
+                Column(
+                  children: order['orderItems'].map<Widget>((item) {
+                    return FutureBuilder<Map<String, dynamic>>(
+                      future: _orderService.fetchShoeById(item['shoeId']), // Fetch shoe by ID
+                      builder: (context, shoeSnapshot) {
+                        if (shoeSnapshot.connectionState == ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        }
+
+                        if (shoeSnapshot.hasError) {
+                          return Text("Error fetching shoe details");
+                        }
+
+                        if (shoeSnapshot.hasData) {
+                          var shoe = shoeSnapshot.data!;
+                          return GestureDetector(
+                            onTap: () {
+                              // Navigate to ShoePage with shoeId
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ShoesPage(shoeId: item['shoeId']),
+                                ),
+                              );
+                            },
+                            child: Row(
+                              children: [
+                                Image.network(shoe['imagePath'], width: 50, height: 50),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(shoe['name'], style: const TextStyle(fontWeight: FontWeight.bold)),
+                                      Text(shoe['description']),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text("Rs. ${shoe['price']}"),
+                                          Text("Qty: ${item['quantity']}"),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 10),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+
+                        return const Center(child: Text("No shoe details available."));
+                      },
+                    );
+                  }).toList(),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text("Total: Rs. ${order['totalPrice']}"),
+                  ],
+                ),
                 Text("Status: ${order['orderStatus']}"),
-                // Add "Review" button for orders with "Delivered" status
                 if (order['orderStatus'] == 'Delivered')
                   Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
                       onPressed: () {
-                        // Navigate to the ReviewPage when "Review" is pressed
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -178,13 +238,8 @@ class _CustomerOrderPageState extends State<CustomerOrderPage>
                       child: const Text("Review"),
                     ),
                   ),
-
               ],
             ),
-            isThreeLine: true,
-            onTap: () {
-              _showOrderDetails(context, order);
-            },
           ),
         );
       },
