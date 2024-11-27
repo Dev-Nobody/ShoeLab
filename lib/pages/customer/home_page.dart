@@ -5,6 +5,7 @@ import 'package:fyp/components/my_bottom_navbar.dart';
 import 'package:fyp/pages/customer/account_page.dart';
 import 'package:fyp/pages/customer/cart_page.dart';
 import 'package:fyp/pages/customer/chat_Page.dart';
+import 'package:fyp/pages/customer/chat_pannel.dart';
 import 'package:fyp/pages/customer/search_page.dart';
 import 'package:fyp/pages/customer/shop_page.dart';
 import 'package:fyp/services/cart_service.dart';
@@ -63,7 +64,8 @@ class _HomePageState extends State<HomePage> {
   // pages to display
   final List<Widget> _pages = [
     ShopPage(),
-    const ChatPage(receiverUserEmail: 'admin@gmail.com', receiverUserId: 'admin@gmail.com'),
+    const ChatPannel(),
+    // const ChatPage(receiverUserEmail: 'admin@gmail.com', receiverUserId: 'admin@gmail.com'),
     const CartPage(),
     const AccountPage(),
   ];
@@ -110,31 +112,31 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       )
-          : _selectedIndex == 1
-          ? AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        actions: [
-          IconButton(
-            onPressed: signUserOut,
-            icon: Icon(
-              Icons.logout,
-              color: Colors.lightGreenAccent.shade100,
-            ),
-          )
-        ],
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: Icon(
-              Icons.menu,
-              color: Colors.lightGreenAccent.shade100,
-            ),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-          ),
-        ),
-      )
+      //     : _selectedIndex == 1
+      //     ? AppBar(
+      //   elevation: 0,
+      //   backgroundColor: Colors.transparent,
+      //   actions: [
+      //     IconButton(
+      //       onPressed: signUserOut,
+      //       icon: Icon(
+      //         Icons.logout,
+      //         color: Colors.lightGreenAccent.shade100,
+      //       ),
+      //     )
+      //   ],
+      //   leading: Builder(
+      //     builder: (context) => IconButton(
+      //       icon: Icon(
+      //         Icons.menu,
+      //         color: Colors.lightGreenAccent.shade100,
+      //       ),
+      //       onPressed: () {
+      //         Scaffold.of(context).openDrawer();
+      //       },
+      //     ),
+      //   ),
+      // )
           : null,
 
       bottomNavigationBar: MyBottomNavbar(

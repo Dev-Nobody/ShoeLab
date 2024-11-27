@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:fyp/pages/customer/change_password.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AdminProfile extends StatefulWidget {
@@ -95,9 +96,11 @@ class _AdminProfileState extends State<AdminProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
-        backgroundColor: Colors.grey.shade500,
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text('Profile',style: TextStyle(color: Colors.white),),
+        backgroundColor:  Color(0xFF161822),
       ),
+      backgroundColor:  Color(0xFF161822),
       body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
         future: getUserDetails(),
         builder: (context, snapshot) {
@@ -151,6 +154,12 @@ class _AdminProfileState extends State<AdminProfile> {
                       ElevatedButton(
                         onPressed: _updateUserDetails,
                         child: Text('Update Profile'),
+                      ),SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => ChangePasswordPage(),));
+                        },
+                        child: Text('Change Password'),
                       ),
                     ],
                   ),

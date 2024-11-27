@@ -85,13 +85,7 @@ class VendorDrawer extends StatelessWidget {
                     text: 'O R D E R',
                     onTap:  onOrderTap,
                   ),
-              
-                  //inventory management
-                  MyListTile(
-                    icon: Icons.person,
-                    text: 'I N V E N T O R Y',
-                    onTap:  onProfileTap,
-                  ),
+
               
                   //communication tools
                   MyListTile(
@@ -101,27 +95,27 @@ class VendorDrawer extends StatelessWidget {
                   ),
               
                   //profile
-                  MyListTile(
-                    icon: Icons.person,
-                    text: 'F E E D B A C K',
-                    onTap:  onProfileTap,
-                  ),
-              
-                  //profile
-                  MyListTile(
-                    icon: Icons.person,
-                    text: 'P A Y M E N T ',
-                    onTap:  onProfileTap,
-                  ),
-              
-                  //profile
-                  MyListTile(
-                    icon: Icons.person,
-                    text: 'C O M P L I A N C E ',
-                    onTap:  onProfileTap,
-                  ),
-              
-              
+                  // MyListTile(
+                  //   icon: Icons.person,
+                  //   text: 'F E E D B A C K',
+                  //   onTap:  onProfileTap,
+                  // ),
+                  //
+                  // //profile
+                  // MyListTile(
+                  //   icon: Icons.person,
+                  //   text: 'P A Y M E N T ',
+                  //   onTap:  onProfileTap,
+                  // ),
+                  //
+                  // //profile
+                  // MyListTile(
+                  //   icon: Icons.person,
+                  //   text: 'C O M P L I A N C E ',
+                  //   onTap:  onProfileTap,
+                  // ),
+                  //
+
                   //logout
                   MyListTile(
                     icon: Icons.logout,

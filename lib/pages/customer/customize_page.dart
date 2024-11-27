@@ -1,98 +1,73 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_3d_controller/flutter_3d_controller.dart';
-import 'package:object_3d/object_3d.dart';
+import 'package:flutter_cube/flutter_cube.dart';
 
 class CustomizePage extends StatefulWidget {
+  const CustomizePage({super.key});
+
   @override
-  _CustomizePageState createState() => _CustomizePageState();
+  State<CustomizePage> createState() => _CustomizePageState();
 }
 
 class _CustomizePageState extends State<CustomizePage> {
-  Color selectedColor = Colors.white;
+  late Object _modelObject;
 
-  void changeColor(Color color) {
+  @override
+  void initState() {
+    super.initState();
+    // Load the default model (e.g., white model)
+    _modelObject = Object(fileName: "lib/shoesModel/nehigh/red/single_shoes.obj");
+  }
+
+  void updateModel(String modelPath) {
     setState(() {
-      selectedColor = color;
+      // Update the 3D model with the new file path
+      _modelObject = Object(fileName: modelPath);
     });
+  }
+
+  Widget build3DModel() {
+    return SizedBox(
+      height: 400,
+      child: Cube(
+        onSceneCreated: (Scene scene) {
+          scene.world.add(_modelObject);
+          scene.camera.zoom = 10;
+          scene.light.position.setFrom(Vector3(0, 10, 10));
+        },
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Customize 3D Model'),
-      ),
+      appBar: AppBar(title: const Text("Customize Model")),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(
-            child: Center(
-              child: Container(
-                height: 300,
-                width: 300,
-                color: Colors.grey[200],
-                child:
-
-                Object3D(
-                  size: const Size(200.0, 200.0),
-                  path: "lib/shoesModel/sneakers/sssss.obj",
-                  color: selectedColor,
-                ),
+          build3DModel(),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                onPressed: () => updateModel("lib/shoesModel/nehigh/red/single_shoes.obj"),
+                child: const Text("Red"),
               ),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 20.0),
-            child: Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 10.0,
-              children: [
-                ColorOption(
-                  color: Colors.red,
-                  onSelected: changeColor,
-                ),
-                ColorOption(
-                  color: Colors.green,
-                  onSelected: changeColor,
-                ),
-                ColorOption(
-                  color: Colors.blue,
-                  onSelected: changeColor,
-                ),
-                ColorOption(
-                  color: Colors.yellow,
-                  onSelected: changeColor,
-                ),
-                ColorOption(
-                  color: Colors.purple,
-                  onSelected: changeColor,
-                ),
-              ],
-            ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
+                onPressed: () => updateModel("lib/shoesModel/nehigh/black/single_shoes.obj"),
+                child: const Text("Black"),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
+                onPressed: () => updateModel("lib/shoesModel/nehigh/white/single_shoes.obj"),
+                child: const Text("White"),
+              ),
+            ],
           ),
         ],
-      ),
-    );
-  }
-}
-
-class ColorOption extends StatelessWidget {
-  final Color color;
-  final Function(Color) onSelected;
-
-  ColorOption({required this.color, required this.onSelected});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => onSelected(color),
-      child: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: color,
-          shape: BoxShape.circle,
-          border: Border.all(width: 2.0, color: Colors.grey[700]!),
-        ),
       ),
     );
   }

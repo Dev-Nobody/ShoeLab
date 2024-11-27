@@ -17,17 +17,17 @@ class SettingPage extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Container(
-            child: GestureDetector(
-              child: Text('BLOCKED USERS'),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => BlockedUsersPage(),
-              ),
-            ),
-            ),
-          ),
+         ListTile(
+           title: Text('Blocked Users'),
+           onTap: () {
+             Navigator.push(
+               context,
+               MaterialPageRoute(
+                 builder: (context) => BlockedUsersPage(),
+               ),
+             );
+           },
+         )
         ],
       ),
     );

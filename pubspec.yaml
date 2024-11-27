@@ -60,6 +60,8 @@ dependencies:
   flutter_rating_bar: ^4.0.0
   flutter_colorpicker: ^1.0.3
   list_wheel_scroll_view_nls: ^0.0.3
+  intl_phone_field: ^3.2.0
+  google_sign_in: ^6.2.2
 
 
 dev_dependencies:
@@ -92,6 +94,9 @@ flutter:
      - lib/shoesModel/sneakers/sssss.mtl
      - lib/shoesModel/sneakers/sssss.obj
      - lib/shoesModel/sneakers/sssss.glb
+     - lib/shoesModel/nehigh/black/
+     - lib/shoesModel/nehigh/red/
+     - lib/shoesModel/nehigh/white/
      - assets/shoesModel/sneakers/
      - lib/shoesModel/highTops/
   #   - images/a_dot_ham.jpeg

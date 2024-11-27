@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fyp/pages/customer/shoes_page.dart';
 
 class SearchBarComponent extends StatefulWidget {
   final String collectionName;
@@ -24,6 +25,7 @@ class _SearchBarComponentState extends State<SearchBarComponent> {
     return Column(
       children: [
         TextField(
+          style: TextStyle(color: Colors.white),
           controller: _searchController,
           onChanged: (query) {
             setState(() {
@@ -32,13 +34,19 @@ class _SearchBarComponentState extends State<SearchBarComponent> {
           },
           decoration: InputDecoration(
             labelText: 'Search',
-            border: OutlineInputBorder(),
+            labelStyle: TextStyle(color: Colors.lightGreenAccent.shade100),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.lightGreenAccent.shade100),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.lightGreenAccent.shade100, width: 2.0),
+            ),
           ),
         ),
         Expanded(
           child: StreamBuilder<QuerySnapshot>(
             stream: _searchQuery.isEmpty
-                ? Stream<QuerySnapshot>.empty() // Show empty stream when search is empty
+                ? Stream<QuerySnapshot>.empty()
                 : FirebaseFirestore.instance
                 .collection(widget.collectionName)
                 .where('name', isGreaterThanOrEqualTo: _searchQuery.toLowerCase())
@@ -58,13 +66,32 @@ class _SearchBarComponentState extends State<SearchBarComponent> {
                 itemCount: items.length,
                 itemBuilder: (context, index) {
                   final item = items[index].data() as Map<String, dynamic>;
+                  final shoeId = items[index].id;
+
                   return ListTile(
-                    title: Text(item['name'],style:TextStyle(color: Colors.white),), // Change according to your field
-                    subtitle: Text(item['brand'],style:TextStyle(color: Colors.grey),), // Change according to your field
-                    trailing: Text('Rs.${item['price']}',style:TextStyle(color: Colors.white),), // Change according to your field
+                    title: Text(
+                      item['name'],
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    subtitle: Text(
+                      item['brand'],
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    trailing: Text(
+                      'Rs.${item['price']}',
+                      style: TextStyle(color: Colors.white),
+                    ),
                     leading: item['imagePath'] != null
                         ? Image.network(item['imagePath'])
                         : null,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ShoesPage(shoeId: shoeId),
+                        ),
+                      );
+                    },
                   );
                 },
               );
@@ -75,3 +102,4 @@ class _SearchBarComponentState extends State<SearchBarComponent> {
     );
   }
 }
+

@@ -174,7 +174,25 @@ class _CartPageState extends State<CartPage> {
                       border:
                           Border.all(color: Colors.lightGreenAccent.shade100)),
                   child: TextButton(
-                      onPressed: () async {},
+                      onPressed:  () async {
+                        List<Map<String, dynamic>> checkedItems =
+                        await fetchCheckedItems(); // Fetch checked items from Firestore
+
+                        if (checkedItems.isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  PaymentPage(checkedItems: checkedItems),
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('No items selected to proceed.')),
+                          );
+                        }
+                      },
                       child: Text(
                         'CheckOut',
                         style: TextStyle(color: Colors.lightGreenAccent.shade100),

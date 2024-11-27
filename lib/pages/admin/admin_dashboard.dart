@@ -6,6 +6,7 @@ import 'package:fyp/components/Drawers/admin_drawer.dart';
 import 'package:fyp/components/Drawers/drawer.dart';
 import 'package:fyp/pages/admin/admin_profile.dart';
 import 'package:fyp/pages/admin/category_management.dart';
+import 'package:fyp/pages/admin/content_page.dart';
 import 'package:fyp/pages/admin/order_page.dart';
 import 'package:fyp/pages/admin/setting_page.dart';
 import 'package:fyp/pages/admin/feedback_page.dart';
@@ -133,7 +134,18 @@ class _AdminDashboardState extends State<AdminDashboard> {
     );
   }
 
-  
+    void  goToContent() {
+    //pop menu drawer
+    Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>  ContentPage(), // Corrected route
+      ),
+    );
+  }
+
+
   final user = FirebaseAuth.instance.currentUser!;
 
   //document IDs
@@ -156,9 +168,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade900,
+      backgroundColor:  Color(0xFF161822),
       //home
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.lightGreenAccent.shade100),
         elevation: 0,
         backgroundColor: Colors.transparent,
         actions: [
@@ -180,16 +193,141 @@ class _AdminDashboardState extends State<AdminDashboard> {
         onFeedbackTap:goToFeedback,
         onOrderTap:goToOrder,
           onSettings:goToSettings,
+        onContent: goToContent,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Center(
-            child: Text(
-              'Welcome :${user.email}  to admin pannel',
-              style: TextStyle(color: Colors.white),
+          Expanded(child: Container(
+            color: Color(0xFF2A2D40),
+            child: Center(
+              child: Text(
+                'Welcome :${user.email}  to admin pannel',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Color(0xFF2A2D40),
+              ),
+
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+               children: [
+                 SizedBox(height: 8,),
+                 Icon(Icons.person),
+                 SizedBox(height: 5,),
+                 Text('Total Users : 4'),
+                 SizedBox(height: 8,),
+               ],
+              ),
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Color(0xFF2A2D40),
+              ),
+
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: 8,),
+                  Icon(Icons.person),
+                  SizedBox(height: 5,),
+                  Text('Total Users : 4'),
+                  SizedBox(height: 8,),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Color(0xFF2A2D40),
+              ),
+
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: 8,),
+                  Icon(Icons.person),
+                  SizedBox(height: 5,),
+                  Text('Total Users : 4'),
+                  SizedBox(height: 8,),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Color(0xFF2A2D40),
+              ),
+
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: 8,),
+                  Icon(Icons.person),
+                  SizedBox(height: 5,),
+                  Text('Total Users : 4'),
+                  SizedBox(height: 8,),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Color(0xFF2A2D40),
+              ),
+
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: 8,),
+                  Icon(Icons.person),
+                  SizedBox(height: 5,),
+                  Text('Total Users : 4'),
+                  SizedBox(height: 8,),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Color(0xFF2A2D40),
+              ),
+
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: 8,),
+                  Icon(Icons.person),
+                  SizedBox(height: 5,),
+                  Text('Total Users : 4'),
+                  SizedBox(height: 8,),
+                ],
+              ),
+            ),
+          ),
+
 
         ],
       ),

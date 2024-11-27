@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fyp/pages/admin/user_page.dart';
 import 'package:fyp/read%20data/get_user_name.dart';
 
 class ManageVendor extends StatefulWidget {
@@ -63,9 +64,11 @@ class _ManageVendorState extends State<ManageVendor> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Manage Vendors'),
-        backgroundColor: Colors.grey.shade800,
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text('Manage Vendors',style: TextStyle(color: Colors.white),),
+          backgroundColor:  Color(0xFF161822),
       ),
+      backgroundColor:  Color(0xFF161822),
       body: FutureBuilder(
         future: getCustomerDocIds(),
         builder: (context, snapshot) {
@@ -91,6 +94,15 @@ class _ManageVendorState extends State<ManageVendor> {
                         removeVendor(docId);
                       },
                     ),
+                    onTap: () {
+                      // Navigate to the UserDetailsPage with the userId
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UserDetailsPage(userId: docIDs[index]),
+                        ),
+                      );
+                    },
                   ),
                 );
               },

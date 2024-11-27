@@ -11,7 +11,6 @@ class ShopPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
 
-
           SizedBox(height: 20),
 
           // Categories Text

@@ -3,8 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/components/Orders_buttons.dart';
 import 'package:fyp/components/my_list_tile.dart';
+import 'package:fyp/pages/customer/bla.dart';
 import 'package:fyp/pages/customer/customer_order_page.dart';
 import 'package:fyp/pages/customer/customer_setting_page.dart';
+import 'package:fyp/pages/customer/fav_page.dart';
 import 'package:fyp/pages/customer/home_page.dart';
 import 'package:fyp/pages/customer/my_reviews.dart';
 import 'package:fyp/pages/customer/try.dart';
@@ -136,17 +138,20 @@ class _AccountPageState extends State<AccountPage> {
             ),
           ),
 
-          const SizedBox(height: 20,),
+          const SizedBox(height: 10,),
 
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                OrdersButtons(icon: Icons.payment, text: 'To Ship', onTap: goToShip),
-                OrdersButtons(icon: Icons.payment, text: 'To Receive', onTap: goToReceive),
-                OrdersButtons(icon: Icons.payment, text: 'To Review', onTap: goToReview),
-                OrdersButtons(icon: Icons.payment, text: 'Return & Cancellations', onTap: goToShip),
-              ],
+          Container(
+
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  OrdersButtons(icon: Icons.local_shipping_outlined, text: 'To Ship', onTap: goToShip),
+                  OrdersButtons(icon: Icons.check_box_outline_blank_sharp, text: 'To Receive', onTap: goToReceive),
+                  OrdersButtons(icon: Icons.text_snippet_outlined, text: 'To Review', onTap: goToReview),
+                  OrdersButtons(icon: Icons.cached, text: 'Return & Cancellations', onTap: goToShip),
+                ],
+              ),
             ),
           ),
 
@@ -160,22 +165,15 @@ class _AccountPageState extends State<AccountPage> {
             Navigator.push(context, MaterialPageRoute(builder: (context) => MyReviewsPage(),));
           },),
 
-          //my reviews
-          MyListTile(icon: Icons.message_outlined, text: 'My Message', onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => MyReviewsPage(),));
-          },),
-
           //try
           MyListTile(icon: Icons.connect_without_contact_rounded, text: 'Contact Customer Care', onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) => Try(),));
           },),
 
           //try
-          MyListTile(icon: Icons.ac_unit, text: 'sd', onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => Try(),));
+          MyListTile(icon: Icons.favorite, text: 'Favourites', onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => FavouritesPage(),));
           },),
-
-
 
 
         ],

@@ -14,40 +14,39 @@ class OrdersButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: GestureDetector(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                // height: 60,
-                padding: EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.circular(50),
+    return Center( // Wrap with Center widget for centering horizontally
+      child: Container(
+        width: 100,
+        child: GestureDetector(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start, // Aligns content to the top
+              crossAxisAlignment: CrossAxisAlignment.center, // Centers items horizontally
+              children: [
+                Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  child: Icon(
+                    icon,
+                    size: 20,
+                  ),
                 ),
-
-                child: Icon(
-                  icon,
-                  size: 40,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                text,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-
-                ),
+                const SizedBox(height: 8),
+                Text(
+                  text,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.white,
+                  ),
                   textAlign: TextAlign.center,
-                  softWrap: true,  // This ensures that the text will wrap onto the next line
-                  overflow: TextOverflow.visible,
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

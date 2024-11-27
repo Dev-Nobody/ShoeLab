@@ -4,6 +4,7 @@ import 'package:fyp/components/my_button.dart';
 import 'package:fyp/components/my_textfield.dart';
 import 'package:fyp/components/square_tile.dart';
 import 'package:fyp/pages/auth/forget_password_page.dart';
+import 'package:fyp/services/auth_services.dart';
 
 class LoginPage extends StatefulWidget {
   final Function()? onTap;
@@ -188,11 +189,11 @@ class _LoginPageState extends State<LoginPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SquareTile(ImagePath: 'lib/images/apple.png'),
+                    // SquareTile(ImagePath: 'lib/images/apple.png'),
                     SizedBox(
                       width: 25,
                     ),
-                    SquareTile(ImagePath: 'lib/images/google.png'),
+                    SquareTile(ImagePath: 'lib/images/google.png',onTap: () => AuthService().signInWithGoogle(),),
 
                     SizedBox(
                       width: 25,

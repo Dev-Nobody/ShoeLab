@@ -18,6 +18,32 @@ class ChatService extends ChangeNotifier {
     await ref.putFile(imageFile);
     return await ref.getDownloadURL();
   }
+  // Fetch a list of vendors from Firestore
+  Future<List<Map<String, String>>> fetchVendors() async {
+    List<Map<String, String>> vendors = [];
+
+    try {
+      // Query Firestore to fetch users with the role "Vendor"
+      final QuerySnapshot snapshot = await _fireStore
+          .collection('users')
+          .where('role', isEqualTo: 'Vendor')
+          .get();
+
+      // Map each document to a format with UID and email
+      for (var document in snapshot.docs) {
+        vendors.add({
+          'uid': document.id, // Document ID as UID
+          'email': document['email'], // Assuming each vendor has an email field
+          'username': document['username'], // Include the vendor's name, if available
+        });
+      }
+    } catch (e) {
+      print("Error fetching vendors: $e");
+    }
+
+    return vendors;
+  }
+
 
   // Fetch the current user information from Firestore
   Future<Map<String, String>> _getCurrentUserInfo() async {
@@ -166,6 +192,58 @@ class ChatService extends ChangeNotifier {
 
     return chatUsers;
   }
+
+  // Get customers who have sent at least one message to the current vendor
+  Future<List<Map<String, dynamic>>> getCustomersForVendor() async {
+    List<Map<String, dynamic>> customers = [];
+    final currentVendorEmail = _firebaseAuth.currentUser!.email!;
+
+    try {
+      // Query all chat rooms
+      final chatRoomsSnapshot = await _fireStore.collection('chat_rooms').get();
+
+      // Loop through each chat room
+      for (var chatRoomDoc in chatRoomsSnapshot.docs) {
+        final chatRoomId = chatRoomDoc.id;
+
+        // Check if this chat room involves the current vendor
+        if (chatRoomId.contains(currentVendorEmail)) {
+          // Query messages in this chat room
+          final messagesSnapshot = await _fireStore
+              .collection('chat_rooms')
+              .doc(chatRoomId)
+              .collection('messages')
+              .where('receiverId', isEqualTo: currentVendorEmail)
+              .get();
+
+          // Collect unique sender IDs from messages
+          for (var messageDoc in messagesSnapshot.docs) {
+            final senderId = messageDoc['senderId'];
+
+            // Avoid duplicates
+            if (!customers.any((customer) => customer['email'] == senderId)) {
+              // Fetch customer details
+              final userDoc =
+              await _fireStore.collection('users').doc(senderId).get();
+
+              if (userDoc.exists) {
+                customers.add({
+                  'uid': senderId,
+                  'email': userDoc['email'],
+                  'username': userDoc['username'], // Optional if stored
+                });
+              }
+            }
+          }
+        }
+      }
+    } catch (e) {
+      print("Error fetching customers for vendor: $e");
+    }
+
+    return customers;
+  }
+
 
   // Report User
   Future<void> reportUser(String messageId, String userId) async {

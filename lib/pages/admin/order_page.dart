@@ -61,7 +61,7 @@ class _OrderPageState extends State<OrderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Your Orders"),
+        title: const Text("Orders"),
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: _ordersFuture,

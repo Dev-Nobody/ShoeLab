@@ -1,13 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fyp/pages/admin/product_detail.dart';
+import 'package:fyp/services/shoes_services.dart';
 
 class ProductManagement extends StatelessWidget {
+  // Reference to ShoeService
+  final ShoeService _shoesService = ShoeService();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Shoe List'),
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text('Shoe List', style: TextStyle(color: Colors.white)),
+        backgroundColor: Color(0xFF161822),
       ),
+      backgroundColor: Color(0xFF161822),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('shoes').snapshots(),
         builder: (context, snapshot) {
@@ -34,6 +42,27 @@ class ProductManagement extends StatelessWidget {
                       : Icon(Icons.image, size: 50),
                   title: Text(shoe['name']),
                   subtitle: Text('Vendor: ${shoe['vendorUsername']}'),
+                  trailing: IconButton(
+                    onPressed: () async {
+                      // Call the deleteShoe function from ShoeService
+                      await _shoesService.deleteShoe(shoe.id);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Shoe deleted successfully')),
+                      );
+                    },
+                    icon: Icon(Icons.delete, color: Colors.red),
+                  ),
+                  onTap: () {
+                    // Navigate to the shoe details page
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ShoeDetailsPage(
+                          shoeId: shoe.id, // Pass the shoe ID to the details page
+                        ),
+                      ),
+                    );
+                  },
                 ),
               );
             },
@@ -43,4 +72,3 @@ class ProductManagement extends StatelessWidget {
     );
   }
 }
-

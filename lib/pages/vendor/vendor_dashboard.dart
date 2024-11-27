@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/components/Drawers/drawer.dart';
 import 'package:fyp/components/Drawers/vendor_drawer.dart';
+import 'package:fyp/components/square_tile.dart';
 import 'package:fyp/pages/user_profile.dart';
 import 'package:fyp/pages/vendor/add_product.dart';
 import 'package:fyp/pages/vendor/product_page.dart';
@@ -11,6 +12,7 @@ import 'package:fyp/pages/vendor/vendor_feedback.dart';
 import 'package:fyp/pages/vendor/vendor_order_page.dart';
 import 'package:fyp/pages/vendor/vendor_profile.dart';
 import 'package:fyp/read%20data/get_user_name.dart';
+import 'package:lottie/lottie.dart';
 
 class VendorDashboard extends StatefulWidget {
   VendorDashboard({super.key});
@@ -104,6 +106,7 @@ class _VendorDashboardState extends State<VendorDashboard> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
+        iconTheme: IconThemeData(color:  Colors.lightGreenAccent.shade100),
         actions: [
           IconButton(
             onPressed: signUserOut,
@@ -123,12 +126,16 @@ class _VendorDashboardState extends State<VendorDashboard> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Center(
-            child: Text(
-              'Welcome :${user.email}',
-              style: TextStyle(color: Colors.white),
-            ),
+          Container(
+              padding: EdgeInsets.symmetric(horizontal: 25),
+              child: Lottie.asset('lib/animations/vendor.json')),
+
+          SizedBox(height: 30,),
+          Text(
+            'Welcome :${user.email}',
+            style: TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.bold),
           ),
+
 
         ],
       ),

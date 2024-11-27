@@ -75,7 +75,11 @@ class _CategoryPageState extends State<CategoryPage> {
               children: [
                 TextField(
                   controller: _categoryNameController,
-                  decoration: InputDecoration(labelText: 'Category Name'),
+                  decoration: InputDecoration(
+                    labelText: 'Category Name',
+                    labelStyle: TextStyle(color: Colors.white),  // White label text
+                  ),
+                  style: TextStyle(color: Colors.white),  // White input text
                 ),
                 SizedBox(height: 20),
                 GestureDetector(
@@ -116,14 +120,25 @@ class _CategoryPageState extends State<CategoryPage> {
             ElevatedButton(
               onPressed: () {
                 if (_categoryNameController.text.isNotEmpty) {
-                  _saveCategory(
-                    _categoryNameController.text,
-                    imageFile: _imageFile,
-                    docId: docId,
-                  );
-                  Navigator.of(context).pop();
+                  if (_imageFile != null || currentImageUrl != null) {
+                    // Only save if the category name is not empty and there's an image (either selected or already existing)
+                    _saveCategory(
+                      _categoryNameController.text,
+                      imageFile: _imageFile,
+                      docId: docId,
+                    );
+                    Navigator.of(context).pop();
+                  } else {
+                    // Show an error message if the image is missing
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Please select an image for the category.')),
+                    );
+                  }
                 } else {
-                  // Handle validation error (e.g., show an error message)
+                  // Show an error message if the category name is empty
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Please enter a category name.')),
+                  );
                 }
               },
               child: Text(docId != null ? 'Update' : 'Add'),
@@ -146,9 +161,11 @@ class _CategoryPageState extends State<CategoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Categories'),
-        backgroundColor: Colors.grey.shade500,
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text('Categories',style: TextStyle(color: Colors.white),),
+        backgroundColor: Color(0xFF161822),
       ),
+      backgroundColor:  Color(0xFF161822),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('categories').snapshots(),
         builder: (context, snapshot) {
@@ -194,6 +211,7 @@ class _CategoryPageState extends State<CategoryPage> {
                             //   ),
                             // ),
                             IconButton(
+                              color: Colors.red,
                               icon: Icon(Icons.delete),
                               onPressed: () {
                                 _deleteCategory(category.id);
@@ -217,8 +235,8 @@ class _CategoryPageState extends State<CategoryPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showCategoryDialog(),
-        child: Icon(Icons.add),
-        backgroundColor: Colors.grey.shade500,
+        child: Icon(Icons.add,color: Colors.white,),
+        backgroundColor: Color(0xFF2A2D40),
       ),
     );
   }

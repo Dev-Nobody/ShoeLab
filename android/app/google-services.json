@@ -7,12 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:776919120770:android:88124f9046f2fe2c9bad9b",
+        "mobilesdk_app_id": "1:776919120770:android:05cafd8407c88e5e9bad9b",
         "android_client_info": {
           "package_name": "com.example.fyp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "776919120770-h6sj0lqao5v6nl2fg2m1ap3so7hsbohc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDo7T3F8fSiuFIcYuAduAKJLZ5Gqewr5ww"
@@ -20,7 +25,63 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "776919120770-h6sj0lqao5v6nl2fg2m1ap3so7hsbohc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "776919120770-jtt226k0mqv90kg3p7mev6mqifeg1btm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fyp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:776919120770:android:88124f9046f2fe2c9bad9b",
+        "android_client_info": {
+          "package_name": "com.example.shoelab"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "776919120770-fiunjme6ddg1dk68nmob2clq8au9eaqq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.shoelab",
+            "certificate_hash": "3acfd93a7964e8a5698db2ee603c0b311a07afa9"
+          }
+        },
+        {
+          "client_id": "776919120770-h6sj0lqao5v6nl2fg2m1ap3so7hsbohc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDo7T3F8fSiuFIcYuAduAKJLZ5Gqewr5ww"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "776919120770-h6sj0lqao5v6nl2fg2m1ap3so7hsbohc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "776919120770-jtt226k0mqv90kg3p7mev6mqifeg1btm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fyp"
+              }
+            }
+          ]
         }
       }
     }

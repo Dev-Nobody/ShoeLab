@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:fyp/pages/customer/change_password.dart';
 import 'package:image_picker/image_picker.dart';
 
 class VendorProfile extends StatefulWidget {
@@ -180,6 +181,12 @@ class _VendorProfileState extends State<VendorProfile> {
                     ElevatedButton(
                       onPressed: _updateUserDetails,
                       child: Text('Update Profile'),
+                    ),SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => ChangePasswordPage(),));
+                      },
+                      child: Text('Change Password'),
                     ),
                   ],
                 ),

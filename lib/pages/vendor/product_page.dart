@@ -2,8 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fyp/pages/vendor/add_product.dart';
+import 'package:fyp/services/shoes_services.dart';
 
 class ProductPage extends StatelessWidget {
+  final ShoeService _shoeService = ShoeService();
+
   @override
   Widget build(BuildContext context) {
     // Get the current user's email
@@ -14,22 +17,22 @@ class ProductPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Products'),
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('shoes')
-            .where('vendorUsername', isEqualTo: userEmail)
-            .snapshots(),
+      body: StreamBuilder<List<QueryDocumentSnapshot>>(
+        stream: _shoeService.fetchShoes(userEmail),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           }
 
-          var shoes = snapshot.data!.docs;
+          var shoes = snapshot.data!;
 
           // Check if there are no products
           if (shoes.isEmpty) {
             return Center(
-              child: Text('No Products Added', style: TextStyle(fontSize: 18, color: Colors.grey)),
+              child: Text(
+                'No Products Added',
+                style: TextStyle(fontSize: 18, color: Colors.grey),
+              ),
             );
           }
 
@@ -50,6 +53,44 @@ class ProductPage extends StatelessWidget {
                       : Icon(Icons.image, size: 50),
                   title: Text(shoe['name']),
                   subtitle: Text('Rs.${shoe['price']}'),
+                  trailing: IconButton(
+                    icon: Icon(Icons.delete, color: Colors.red),
+                    onPressed: () async {
+                      // Confirm delete action
+                      bool confirmDelete = await showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('Delete Product'),
+                            content: Text('Are you sure you want to delete this product?'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, false),
+                                child: Text('Cancel'),
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, true),
+                                child: Text('Delete'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+
+                      if (confirmDelete) {
+                        try {
+                          await _shoeService.deleteShoe(shoe.id);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Product deleted successfully')),
+                          );
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Failed to delete product')),
+                          );
+                        }
+                      }
+                    },
+                  ),
                 ),
               );
             },

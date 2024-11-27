@@ -15,6 +15,7 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       backgroundColor:  Colors.grey.shade900,
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.lightGreenAccent.shade100),
         backgroundColor:  Colors.grey.shade900,
       ),
       body: SearchBarComponent(collectionName: 'shoes'),

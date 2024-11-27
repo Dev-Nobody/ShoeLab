@@ -11,42 +11,39 @@ class VendorOrderPage extends StatefulWidget {
 
 class _VendorOrderPageState extends State<VendorOrderPage>
     with SingleTickerProviderStateMixin {
-  OrderService _orderService = OrderService(); // Create an instance of OrderService
-  late Future<List<Map<String, dynamic>>> _ordersFuture; // Store the future
-  String? _currentUserEmail; // Variable to store the current user's email
+  final OrderService _orderService = OrderService();
+  late Future<List<Map<String, dynamic>>> _ordersFuture;
+  String? _currentUserEmail;
   TabController? _tabController;
 
   @override
   void initState() {
     super.initState();
-    _getCurrentUserEmail(); // Get the current user's email on init
-    _ordersFuture = _orderService.fetchOrders(); // Fetch the orders on init
-    _tabController = TabController(length: 4, vsync: this);
+    _getCurrentUserEmail();
+    _ordersFuture = _orderService.fetchOrders();
+    _tabController = TabController(length: 5, vsync: this);
   }
 
-  // Get the current logged-in user's email using FirebaseAuth
   void _getCurrentUserEmail() {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       setState(() {
-        _currentUserEmail = user.email; // Set the current user's email
+        _currentUserEmail = user.email;
       });
     }
   }
 
-  // Function to update the order status
   Future<void> _updateOrderStatus(String orderId, String newStatus) async {
     try {
       await _orderService.updateOrderStatus(orderId, newStatus);
       setState(() {
-        _ordersFuture = _orderService.fetchOrders(); // Refresh the order list after updating
+        _ordersFuture = _orderService.fetchOrders();
       });
     } catch (e) {
       print("Error updating order status: $e");
     }
   }
 
-  // Function to show order item details in an alert dialog
   void _showOrderDetails(BuildContext context, Map<String, dynamic> order) {
     showDialog(
       context: context,
@@ -85,7 +82,6 @@ class _VendorOrderPageState extends State<VendorOrderPage>
     );
   }
 
-  // Function to filter orders by their status
   List<Map<String, dynamic>> _filterOrdersByStatus(List<Map<String, dynamic>> orders, String status) {
     return orders.where((order) => order['orderStatus'] == status).toList();
   }
@@ -98,6 +94,7 @@ class _VendorOrderPageState extends State<VendorOrderPage>
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
+            Tab(text: "All"),
             Tab(text: "Confirm Orders"),
             Tab(text: "Process Orders"),
             Tab(text: "Shipped Orders"),
@@ -106,7 +103,7 @@ class _VendorOrderPageState extends State<VendorOrderPage>
         ),
       ),
       body: _currentUserEmail == null
-          ? const Center(child: CircularProgressIndicator()) // Show loading state while retrieving the user's email
+          ? const Center(child: CircularProgressIndicator())
           : FutureBuilder<List<Map<String, dynamic>>>(
         future: _ordersFuture,
         builder: (context, snapshot) {
@@ -132,6 +129,7 @@ class _VendorOrderPageState extends State<VendorOrderPage>
             return TabBarView(
               controller: _tabController,
               children: [
+                _buildOrderList(filteredOrders, 'all'), // All orders
                 _buildOrderList(_filterOrdersByStatus(filteredOrders, 'Pending'), 'confirm'),
                 _buildOrderList(_filterOrdersByStatus(filteredOrders, 'Processing'), 'process'),
                 _buildOrderList(_filterOrdersByStatus(filteredOrders, 'Shipped'), 'ship'),
@@ -146,7 +144,6 @@ class _VendorOrderPageState extends State<VendorOrderPage>
     );
   }
 
-  // Function to build the list of orders, with no orders message
   Widget _buildOrderList(List<Map<String, dynamic>> orders, String action) {
     if (orders.isEmpty) {
       return Center(
@@ -167,6 +164,7 @@ class _VendorOrderPageState extends State<VendorOrderPage>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text("Customer: ${order['userId']}"),
+                Text("Status: ${order['orderStatus']}"),
                 Text("Total Price: Rs. ${order['totalPrice']}"),
                 Text("Order Date: ${order['orderDate']}"),
                 Text("Order Time: ${order['orderTime']}"),
@@ -177,19 +175,19 @@ class _VendorOrderPageState extends State<VendorOrderPage>
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        _showOrderDetails(context, order); // View details button
+                        _showOrderDetails(context, order);
                       },
                       child: const Text("View Details"),
                     ),
                     const SizedBox(width: 10),
-                    nextStatus != null
+                    nextStatus.isNotEmpty
                         ? ElevatedButton(
                       onPressed: () {
-                        _updateOrderStatus(order['orderId'], nextStatus); // Update status
+                        _updateOrderStatus(order['orderId'], nextStatus);
                       },
-                      child: Text(nextStatus), // Display the next status as the button text
+                      child: Text(nextStatus),
                     )
-                        : Container(), // If no next status, do nothing
+                        : Container(),
                   ],
                 ),
               ],
@@ -201,7 +199,6 @@ class _VendorOrderPageState extends State<VendorOrderPage>
     );
   }
 
-  // Function to get the next status name based on the current order status
   String _getNextStatus(String currentStatus) {
     switch (currentStatus) {
       case 'Pending':
@@ -211,8 +208,7 @@ class _VendorOrderPageState extends State<VendorOrderPage>
       case 'Shipped':
         return 'Delivered';
       default:
-        return ''; // or throw an exception, or return a fallback status
+        return '';
     }
   }
-
 }

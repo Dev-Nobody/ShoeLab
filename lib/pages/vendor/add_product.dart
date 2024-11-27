@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fyp/services/content_service.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,6 +17,7 @@ class _AddProductPageState extends State<AddProductPage> {
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController brandController = TextEditingController();
   final TextEditingController sizeController = TextEditingController();
+  final ContentService contentService = ContentService();
 
   String selectedCategory = '';
   List<String> sizes = [];
@@ -91,7 +93,7 @@ class _AddProductPageState extends State<AddProductPage> {
 
     await uploadImage();
 
-    // Create a new shoe document with vendor username
+    // Add the new product to the 'shoes' collection
     await FirebaseFirestore.instance.collection('shoes').add({
       'name': nameController.text,
       'price': double.parse(priceController.text),
@@ -100,9 +102,16 @@ class _AddProductPageState extends State<AddProductPage> {
       'brand': brandController.text,
       'quantity': quantity,
       'sizes': sizes,
-      'category': selectedCategory, // Store category ID or name
-      'vendorUsername': vendorUsername, // Store the vendor username
+      'category': selectedCategory,
+      'vendorUsername': vendorUsername,
     });
+
+    // Add content with the product details
+    await contentService.addContent(
+      'Brand New Shoes',
+      '${descriptionController.text}\nUploaded by: $vendorUsername',
+      _image,
+    );
 
     // Clear the form after submission
     nameController.clear();
@@ -120,6 +129,7 @@ class _AddProductPageState extends State<AddProductPage> {
 
     Navigator.pop(context);
   }
+
 
   @override
   Widget build(BuildContext context) {

@@ -152,19 +152,26 @@ void cameraImage() async {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: _buildMessageList(),
-            ),
-            _buildMessageInput(),
-            SizedBox(
-              height: 15,
-            )
-          ],
+    return Scaffold(
+      backgroundColor: Colors.grey.shade900,
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.green),
+        backgroundColor: Colors.grey.shade900,
+      ),
+      body: Container(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: _buildMessageList(),
+              ),
+              _buildMessageInput(),
+              SizedBox(
+                height: 15,
+              )
+            ],
+          ),
         ),
       ),
     );

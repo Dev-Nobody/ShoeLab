@@ -4,9 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/components/my_size_box.dart';
 import 'package:fyp/components/my_slider.dart';
-import 'package:fyp/pages/customer/cart_page.dart';
 import 'package:fyp/pages/customer/customize_page.dart';
-import 'package:fyp/pages/customer/home_page.dart';
+import 'package:fyp/services/fav_service.dart';
+
 
 class ShoesPage extends StatefulWidget {
   final String shoeId;
@@ -20,6 +20,9 @@ class ShoesPage extends StatefulWidget {
 class _ShoesPageState extends State<ShoesPage> {
   String? selectedSize;
   Map<String, dynamic>? shoeData;
+  bool isFavourite = false;
+
+  final FavouriteService _favouriteService = FavouriteService();
 
   Future<void> fetchShoeData() async {
     DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
@@ -28,6 +31,12 @@ class _ShoesPageState extends State<ShoesPage> {
         .get();
     setState(() {
       shoeData = documentSnapshot.data() as Map<String, dynamic>;
+    });
+
+    // Check if shoe is favorite
+    final favStatus = await _favouriteService.isFavourite(widget.shoeId);
+    setState(() {
+      isFavourite = favStatus;
     });
   }
 
@@ -100,6 +109,21 @@ class _ShoesPageState extends State<ShoesPage> {
     }
   }
 
+  void toggleFavourite() async {
+    if (shoeData != null) {
+      await _favouriteService.toggleFavourite(widget.shoeId, shoeData!);
+      final favStatus = await _favouriteService.isFavourite(widget.shoeId);
+      setState(() {
+        isFavourite = favStatus;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(isFavourite ? 'Added to Favourites' : 'Removed from Favourites'),
+        duration: const Duration(seconds: 2),
+      ));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (shoeData == null) {
@@ -129,61 +153,6 @@ class _ShoesPageState extends State<ShoesPage> {
                 fontSize: 26),
           ),
         ),
-        actions: [
-          StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection('users')
-                .doc(FirebaseAuth.instance.currentUser?.email)
-                .collection('cart')
-                .snapshots(),
-            builder: (context, snapshot) {
-              int cartCount = snapshot.data?.docs.length ?? 0;
-              return Stack(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => HomePage(selectedIndex: 2),
-                        ),
-                      );
-                    },
-                    icon: Icon(
-                      Icons.shopping_cart,
-                      color: Colors.grey.shade500,
-                    ),
-                  ),
-                  if (cartCount > 0)
-                    Positioned(
-                      right: 5,
-                      top: 5,
-                      child: Container(
-                        padding: const EdgeInsets.all(2),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        constraints: const BoxConstraints(
-                          minWidth: 18,
-                          minHeight: 18,
-                        ),
-                        child: Text(
-                          '$cartCount',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                ],
-              );
-            },
-          ),
-        ],
         backgroundColor: Colors.transparent,
       ),
       body: SafeArea(
@@ -199,7 +168,7 @@ class _ShoesPageState extends State<ShoesPage> {
                     child: RotatedBox(
                       quarterTurns: 1,
                       child: Text(
-                        shoeData!['brand'].toUpperCase(), // Fetch brand
+                        shoeData!['brand'].toUpperCase(),
                         style: TextStyle(
                           color: Colors.lightGreenAccent.shade100,
                           fontSize: 150,
@@ -229,9 +198,7 @@ class _ShoesPageState extends State<ShoesPage> {
                         flex: 2,
                         child: Column(
                           children: [
-                            const SizedBox(
-                              height: 80,
-                            ),
+                            const SizedBox(height: 80),
                             // Size text
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -280,9 +247,7 @@ class _ShoesPageState extends State<ShoesPage> {
                                 fontSize: 20,
                               ),
                             ),
-                            const SizedBox(
-                              height: 100,
-                            ),
+                            const SizedBox(height: 100),
                           ],
                         ),
                       ),
@@ -293,15 +258,11 @@ class _ShoesPageState extends State<ShoesPage> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            // Shoe Image from Firestore
                             Image.network(
-                              shoeData!['imagePath'], // Fetch image URL
+                              shoeData!['imagePath'],
                               width: 220,
                             ),
-                            const SizedBox(
-                              height: 50,
-                            ),
-                            // Add to Cart Button
+                            const SizedBox(height: 50),
                             MySlider(performAction: addShoeToCart),
                             const SizedBox(height: 50),
                           ],
@@ -313,32 +274,38 @@ class _ShoesPageState extends State<ShoesPage> {
                         flex: 2,
                         child: Column(
                           children: [
-                            const SizedBox(
-                              height: 100,
-                            ),
+                            const SizedBox(height: 100),
                             // Favourite Button
                             Container(
                               decoration: BoxDecoration(
+                                color: isFavourite
+                                    ? Colors.red
+                                    : Colors.transparent,
                                 border: Border.all(color: Colors.red),
                                 borderRadius: BorderRadius.circular(40),
                               ),
                               child: IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
+                                onPressed: toggleFavourite,
+                                icon: Icon(
                                   Icons.favorite,
-                                  color: Colors.red,
+                                  color: isFavourite
+                                      ? Colors.white
+                                      : Colors.red,
                                 ),
                               ),
                             ),
-                            const SizedBox(
-                              height: 30,
-                            ),
+                            const SizedBox(height: 30),
                             // Customize Button
                             RotatedBox(
                               quarterTurns: 1,
                               child: GestureDetector(
                                 onTap: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => CustomizePage(),));
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => CustomizePage(),
+                                    ),
+                                  );
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -357,9 +324,9 @@ class _ShoesPageState extends State<ShoesPage> {
                                 ),
                               ),
                             ),
-                            const SizedBox(
-                              height: 30,
-                            ),
+                            const SizedBox(height: 30),
+
+
                           ],
                         ),
                       ),

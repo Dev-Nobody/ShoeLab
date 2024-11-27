@@ -11,7 +11,7 @@ class AdminDrawer extends StatelessWidget {
   final void Function()? onProductTap;
   final void Function()? onFeedbackTap;
   final void Function()? onOrderTap;
-  // final void Function()? onSignOut;
+  final void Function()? onContent;
   final void Function()? onSettings;
   // final void Function()? onMessageTap;
   // final void Function()? onTrackTap;
@@ -26,7 +26,7 @@ class AdminDrawer extends StatelessWidget {
         required this.onProductTap,
         required this.onFeedbackTap,
         required this.onOrderTap,
-        // required this.onSignOut,
+        required this.onContent,
         required this.onSettings,
         // required this.onMessageTap,
         //   required this.onTrackTap,
@@ -36,7 +36,7 @@ class AdminDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-        backgroundColor: Colors.grey[900],
+        backgroundColor: Color(0xFF2A2D40),
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -94,7 +94,7 @@ class AdminDrawer extends StatelessWidget {
           
                   //orders
                   MyListTile(
-                    icon: Icons.person,
+                    icon: Icons.backpack_outlined,
                     text: 'O R D E R S ',
                     onTap:  onOrderTap,
                   ),
@@ -108,21 +108,21 @@ class AdminDrawer extends StatelessWidget {
           
                   //products
                   MyListTile(
-                    icon: Icons.person,
+                    icon: Icons.production_quantity_limits_rounded,
                     text: 'P R O D U C T S ',
                     onTap:  onProductTap,
                   ),
           
                   //feedback
                   MyListTile(
-                    icon: Icons.person,
+                    icon: Icons.feedback_outlined,
                     text: 'F E E D B A C K ',
                     onTap:  onFeedbackTap,
                   ),
 
                   //feedback
                   MyListTile(
-                    icon: Icons.person,
+                    icon: Icons.settings,
                     text: 'S E T T I N G',
                     onTap:  onSettings,
                   ),
@@ -130,8 +130,8 @@ class AdminDrawer extends StatelessWidget {
                   //contnet
                   MyListTile(
                     icon: Icons.person,
-                    text: 'C O N T E N T ( X )',
-                    onTap:  onProfileTap,
+                    text: 'C O N T E N T ',
+                    onTap:  onContent,
                   ),
           
                   //logout

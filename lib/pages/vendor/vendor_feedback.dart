@@ -18,7 +18,7 @@ class _VendorFeedbackState extends State<VendorFeedback> {
         children: [
           GestureDetector(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => AdminChatRoom(receiverUserEmail: 'admin@gmail.com', receiverUserId: 'admin@gmail.com'),));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => AdminChatRoom(receiverUserEmail: 'customer@gmail.com', receiverUserId: 'customer@gmail.com'),));
             },
               child: ListTile(
             title: Text('Admin'),
